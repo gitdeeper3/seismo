@@ -1,0 +1,2 @@
+timestamp,seismic,deformation,hydrogeological,electrical,magnetic,instability,stress,rock_properties,integrated_score,alert_level,confidence
+2026-02-07T10:43:14.229295,0.57,0.52,0.45,0.38,0.6,0.52,0.48,0.42,0.5055999999999999,ELEVATED,0.4907179464144045

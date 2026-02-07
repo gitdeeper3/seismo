@@ -1,0 +1,10 @@
+# Requirements without GUI dependencies
+numpy>=1.21.0
+pandas>=1.3.0
+python-dateutil>=2.8.0
+pytz>=2021.3
+tzlocal>=4.0
+pyyaml>=6.0
+
+# Note: matplotlib is optional for visualization
+# seaborn and plotly are also optional

@@ -1,0 +1,24 @@
+cff-version: 1.2.0
+message: "If you use this software, please cite it as below."
+title: "Seismo: Real-Time Earthquake Monitoring Through Multi-Parameter Geophysical Integration"
+version: 1.0.0
+date-released: 2026-02-07
+doi: 10.5281/zenodo.14063164
+license: MIT
+authors:
+  - given-names: Samir
+    family-names: Baladi
+    orcid: 0009-0003-8903-0029
+    email: gitdeeper@gmail.com
+    affiliation: "Ronin Institute | Rite of Renaissance"
+keywords:
+  - seismology
+  - earthquake-monitoring
+  - geophysics
+  - real-time-analysis
+  - multi-parameter-integration
+  - hazard-assessment
+  - python
+repository-code: "https://gitlab.com/gitdeeper3/seismo"
+url: "https://seismo.netlify.app"
+abstract: "Seismo is an operational framework for real-time earthquake monitoring and probability assessment through integrated analysis of eight geophysical parameters. The system provides quantitative earthquake forecasts with measurable uncertainty for seismic observatories and hazard assessment agencies."

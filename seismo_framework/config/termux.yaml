@@ -1,0 +1,54 @@
+# Seismo Framework - Termux Optimized Configuration
+
+monitoring:
+  interval: 300  # 5 minutes (longer for battery saving)
+  retention_days: 7  # Less storage usage
+  alert_threshold: 0.7
+  enable_alerts: true
+  
+logging:
+  level: WARNING  # Less verbose on mobile
+  file: logs/seismo_termux.log
+  max_size_mb: 5  # Smaller log files
+  backup_count: 3
+
+parameters:
+  weights:
+    seismic: 0.25  # Higher weight for seismic on mobile
+    deformation: 0.15
+    hydrogeological: 0.10
+    electrical: 0.10
+    magnetic: 0.10
+    instability: 0.15
+    stress: 0.10
+    rock_properties: 0.05
+  
+  thresholds:
+    normal: 0.3
+    elevated: 0.5
+    watch: 0.7
+    warning: 1.0
+
+reports:
+  daily_enabled: true
+  weekly_enabled: false  # Disable weekly to save storage
+  monthly_enabled: false  # Disable monthly to save storage
+  alert_reports_enabled: true
+  
+  formats:
+    - txt  # Only text format to save space
+
+data:
+  retention_days: 30  # Shorter retention on mobile
+  backup_enabled: false  # No backup on mobile
+  backup_location: data/backups/
+  
+  export:
+    enabled: true
+    format: csv
+    location: data/exports/
+
+performance:
+  disable_visualization: true  # No matplotlib on Termux
+  low_memory_mode: true
+  batch_size: 100  # Process in smaller batches

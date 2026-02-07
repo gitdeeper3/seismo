@@ -1,0 +1,88 @@
+# Seismo Framework - Operational Configuration
+
+monitoring:
+  interval: 10  # 10 seconds for real-time
+  retention_days: 90
+  alert_threshold: 0.6  # More sensitive in operational mode
+  enable_alerts: true
+  alert_channels:
+    - email
+    - sms
+    - webhook
+  
+logging:
+  level: INFO
+  file: logs/seismo_operational.log
+  max_size_mb: 100
+  backup_count: 10
+  syslog_enabled: true
+
+parameters:
+  weights:
+    seismic: 0.20
+    deformation: 0.15
+    hydrogeological: 0.12
+    electrical: 0.10
+    magnetic: 0.10
+    instability: 0.15
+    stress: 0.10
+    rock_properties: 0.08
+  
+  thresholds:
+    normal: 0.2  # More sensitive thresholds
+    elevated: 0.4
+    watch: 0.6
+    warning: 0.8
+
+  validation:
+    enabled: true
+    min_data_points: 10
+    max_uncertainty: 0.3
+
+reports:
+  daily_enabled: true
+  weekly_enabled: true
+  monthly_enabled: true
+  alert_reports_enabled: true
+  automatic_generation: true
+  
+  formats:
+    - txt
+    - csv
+    - json
+    - pdf  # Professional reports
+    - html  # Web dashboard
+
+  delivery:
+    email_enabled: true
+    ftp_enabled: false
+    webhook_enabled: true
+
+data:
+  retention_days: 365  # One year retention
+  backup_enabled: true
+  backup_location: /backup/seismo/
+  backup_schedule: daily
+  
+  export:
+    enabled: true
+    format: csv
+    location: /exports/seismo/
+    schedule: hourly
+
+  quality:
+    validation_enabled: true
+    auto_correction: true
+    outlier_detection: true
+
+performance:
+  real_time_processing: true
+  parallel_processing: true
+  cache_enabled: true
+  max_concurrent_analyses: 10
+
+security:
+  encryption_enabled: true
+  access_logging: true
+  api_key_required: true
+  rate_limiting: true

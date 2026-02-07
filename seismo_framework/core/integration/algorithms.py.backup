@@ -1,0 +1,502 @@
+"""
+Integration algorithms for combining multiple parameters.
+"""
+
+import numpy as np
+import pandas as pd
+from typing import Dict, List, Optional, Tuple, Union, Any
+import logging
+from scipy import stats
+
+logger = logging.getLogger(__name__)
+
+class ParameterIntegrator:
+    """
+    Integrates multiple geophysical parameters into unified metrics.
+    """
+    
+    def __init__(self, config: Optional[Dict] = None):
+        self.config = config or {}
+        self._setup_defaults()
+        
+    def _setup_defaults(self):
+        defaults = {
+            'integration_method': 'weighted_average',
+            'parameter_weights': {
+                'seismic': 0.20,
+                'deformation': 0.15,
+                'hydrogeological': 0.12,
+                'electrical': 0.10,
+                'magnetic': 0.10,
+                'instability': 0.15,
+                'stress': 0.10,
+                'rock_properties': 0.08,
+            },
+            'normalization_method': 'minmax',
+            'uncertainty_propagation': True,
+            'confidence_threshold': 0.7,
+            'alert_levels': {
+                'normal': (0.0, 0.3),
+                'elevated': (0.3, 0.5),
+                'watch': (0.5, 0.7),
+                'warning': (0.7, 1.0)
+            }
+        }
+        defaults.update(self.config)
+        self.config = defaults
+    
+    def integrate(self, parameters: Dict[str, float]) -> Dict[str, Any]:
+        """
+        Integrate parameter values into a unified score.
+        
+        Args:
+            parameters: Dictionary of parameter values
+            
+        Returns:
+            Dictionary with integration results
+        """
+        results = {
+            'timestamp': pd.Timestamp.now().isoformat(),
+            'parameters': parameters.copy(),
+            'integrated_score': 0.0,
+            'confidence': 0.0,
+            'alert_level': 'normal',
+            'contributions': {},
+            'uncertainties': {},
+            'metadata': {}
+        }
+        
+        try:
+            # Validate parameters
+            valid_params = self._validate_parameters(parameters)
+            if not valid_params:
+                logger.warning("No valid parameters for integration")
+                return self._get_default_result()
+            
+            # Normalize parameters
+            normalized = self._normalize_parameters(valid_params)
+            
+            # Apply integration method
+            method = self.config['integration_method']
+            if method == 'weighted_average':
+                integrated = self._weighted_average(normalized)
+            elif method == 'bayesian':
+                integrated = self._bayesian_integration(normalized)
+            elif method == 'fuzzy':
+                integrated = self._fuzzy_integration(normalized)
+            else:
+                integrated = self._weighted_average(normalized)
+            
+            # Calculate confidence
+            confidence = self._calculate_confidence(integrated, normalized)
+            
+            # Determine alert level
+            alert_level = self._determine_alert_level(integrated['score'])
+            
+            # Update results
+            results.update({
+                'integrated_score': integrated['score'],
+                'confidence': confidence,
+                'alert_level': alert_level,
+                'contributions': integrated.get('contributions', {}),
+                'uncertainties': integrated.get('uncertainties', {}),
+                'metadata': {
+                    'method': method,
+                    'parameters_used': list(valid_params.keys()),
+                    'normalization': self.config['normalization_method']
+                }
+            })
+            
+            logger.info(f"Integration successful: score={integrated['score']:.3f}, "
+                       f"confidence={confidence:.3f}, alert={alert_level}")
+            
+        except Exception as e:
+            logger.error(f"Integration error: {e}")
+            return self._get_default_result()
+        
+        return results
+    
+    def _validate_parameters(self, parameters: Dict[str, float]) -> Dict[str, float]:
+        """Validate parameter values."""
+        valid = {}
+        for name, value in parameters.items():
+            if isinstance(value, (int, float)) and not np.isnan(value):
+                # Clip values to reasonable range
+                clipped = np.clip(float(value), 0.0, 1.0)
+                valid[name] = clipped
+            else:
+                logger.warning(f"Invalid parameter {name}: {value}")
+        
+        return valid
+    
+    def _normalize_parameters(self, parameters: Dict[str, float]) -> Dict[str, Dict[str, float]]:
+        """Normalize parameter values."""
+        normalized = {}
+        method = self.config['normalization_method']
+        values = list(parameters.values())
+        
+        if len(values) < 2:
+            # If only one parameter, return as-is
+            for name, value in parameters.items():
+                normalized[name] = {
+                    'value': value,
+                    'normalized': value,
+                    'method': 'none'
+                }
+            return normalized
+        
+        if method == 'minmax':
+            min_val = min(values)
+            max_val = max(values)
+            if max_val > min_val:
+                for name, value in parameters.items():
+                    normalized[name] = {
+                        'value': value,
+                        'normalized': (value - min_val) / (max_val - min_val),
+                        'method': 'minmax'
+                    }
+            else:
+                # All values equal
+                for name, value in parameters.items():
+                    normalized[name] = {
+                        'value': value,
+                        'normalized': 0.5,
+                        'method': 'constant'
+                    }
+        
+        elif method == 'zscore':
+            mean_val = np.mean(values)
+            std_val = np.std(values)
+            if std_val > 0:
+                for name, value in parameters.items():
+                    z = (value - mean_val) / std_val
+                    # Convert to 0-1 range using sigmoid
+                    normalized_val = 1 / (1 + np.exp(-z))
+                    normalized[name] = {
+                        'value': value,
+                        'normalized': normalized_val,
+                        'method': 'zscore'
+                    }
+            else:
+                for name, value in parameters.items():
+                    normalized[name] = {
+                        'value': value,
+                        'normalized': 0.5,
+                        'method': 'constant'
+                    }
+        
+        elif method == 'rank':
+            # Rank-based normalization
+            sorted_params = sorted(parameters.items(), key=lambda x: x[1])
+            n = len(sorted_params)
+            for rank, (name, value) in enumerate(sorted_params):
+                normalized_val = rank / max(1, n - 1)
+                normalized[name] = {
+                    'value': value,
+                    'normalized': normalized_val,
+                    'method': 'rank'
+                }
+        
+        else:  # No normalization
+            for name, value in parameters.items():
+                normalized[name] = {
+                    'value': value,
+                    'normalized': value,
+                    'method': 'none'
+                }
+        
+        return normalized
+    
+    def _weighted_average(self, normalized_params: Dict[str, Dict[str, float]]) -> Dict[str, Any]:
+        """Weighted average integration."""
+        weights = self.config['parameter_weights']
+        
+        weighted_sum = 0.0
+        weight_sum = 0.0
+        contributions = {}
+        uncertainties = {}
+        
+        for name, param in normalized_params.items():
+            weight = weights.get(name, 0.1)  # Default weight
+            param_value = param['normalized']
+            
+            weighted_sum += param_value * weight
+            weight_sum += weight
+            
+            # Contribution percentage
+            contributions[name] = {
+                'weight': weight,
+                'value': param_value,
+                'contribution': param_value * weight
+            }
+            
+            # Simple uncertainty estimation
+            uncertainty = 0.1 * (1 - param_value) + 0.05  # Higher uncertainty for extreme values
+            uncertainties[name] = uncertainty
+        
+        if weight_sum > 0:
+            score = weighted_sum / weight_sum
+        else:
+            score = 0.5
+        
+        # Calculate overall uncertainty
+        if uncertainties:
+            avg_uncertainty = np.mean(list(uncertainties.values()))
+        else:
+            avg_uncertainty = 0.1
+        
+        return {
+            'score': float(score),
+            'method': 'weighted_average',
+            'contributions': contributions,
+            'uncertainties': uncertainties,
+            'average_uncertainty': float(avg_uncertainty)
+        }
+    
+    def _bayesian_integration(self, normalized_params: Dict[str, Dict[str, float]]) -> Dict[str, Any]:
+        """Bayesian integration using prior probabilities."""
+        # Prior probability (base rate)
+        prior = 0.1
+        
+        likelihoods = []
+        weights = []
+        
+        for name, param in normalized_params.items():
+            value = param['normalized']
+            
+            # Convert to likelihood (evidence strength)
+            if value > 0.5:
+                likelihood = value  # Evidence for event
+            else:
+                likelihood = 1 - value  # Evidence against event
+            
+            # Weight by parameter importance
+            weight = self.config['parameter_weights'].get(name, 0.1)
+            
+            likelihoods.append(likelihood)
+            weights.append(weight)
+        
+        if not likelihoods:
+            return self._weighted_average(normalized_params)
+        
+        # Combine evidence using weighted geometric mean
+        weights_array = np.array(weights)
+        weights_array = weights_array / weights_array.sum()
+        
+        log_likelihood = np.sum(weights_array * np.log(likelihoods))
+        combined_likelihood = np.exp(log_likelihood)
+        
+        # Bayes' theorem
+        posterior = (combined_likelihood * prior) / (
+            combined_likelihood * prior + (1 - combined_likelihood) * (1 - prior)
+        )
+        
+        return {
+            'score': float(posterior),
+            'method': 'bayesian',
+            'prior': prior,
+            'combined_likelihood': float(combined_likelihood)
+        }
+    
+    def _fuzzy_integration(self, normalized_params: Dict[str, Dict[str, float]]) -> Dict[str, Any]:
+        """Fuzzy logic integration."""
+        # Define fuzzy sets
+        def low_membership(x):
+            if x <= 0.3:
+                return 1.0
+            elif x <= 0.5:
+                return (0.5 - x) / 0.2
+            else:
+                return 0.0
+        
+        def medium_membership(x):
+            if x <= 0.3:
+                return 0.0
+            elif x <= 0.5:
+                return (x - 0.3) / 0.2
+            elif x <= 0.7:
+                return 1.0
+            elif x <= 0.9:
+                return (0.9 - x) / 0.2
+            else:
+                return 0.0
+        
+        def high_membership(x):
+            if x <= 0.5:
+                return 0.0
+            elif x <= 0.7:
+                return (x - 0.5) / 0.2
+            else:
+                return 1.0
+        
+        # Aggregate membership values
+        low_values = []
+        medium_values = []
+        high_values = []
+        
+        for name, param in normalized_params.items():
+            value = param['normalized']
+            weight = self.config['parameter_weights'].get(name, 0.1)
+            
+            low_values.append(low_membership(value) * weight)
+            medium_values.append(medium_membership(value) * weight)
+            high_values.append(high_membership(value) * weight)
+        
+        # Defuzzify using centroid method
+        x_points = np.linspace(0, 1, 100)
+        aggregated = np.zeros_like(x_points)
+        
+        for x in x_points:
+            low = min(low_values) if low_values else 0
+            medium = min(medium_values) if medium_values else 0
+            high = min(high_values) if high_values else 0
+            
+            membership = max(
+                min(low, 1 - abs(x - 0.2)),
+                min(medium, 1 - abs(x - 0.5)),
+                min(high, 1 - abs(x - 0.8))
+            )
+            aggregated[np.where(x_points == x)[0][0]] = membership
+        
+        if np.sum(aggregated) > 0:
+            score = np.sum(x_points * aggregated) / np.sum(aggregated)
+        else:
+            score = 0.5
+        
+        return {
+            'score': float(score),
+            'method': 'fuzzy',
+            'fuzzy_sets': {
+                'low': np.mean(low_values) if low_values else 0,
+                'medium': np.mean(medium_values) if medium_values else 0,
+                'high': np.mean(high_values) if high_values else 0
+            }
+        }
+    
+    def _calculate_confidence(self, integrated: Dict[str, Any], 
+                            normalized_params: Dict[str, Dict[str, float]]) -> float:
+        """Calculate confidence in integration result."""
+        factors = []
+        
+        # Factor 1: Number of parameters
+        n_params = len(normalized_params)
+        if n_params >= 6:
+            factors.append(0.9)
+        elif n_params >= 4:
+            factors.append(0.7)
+        elif n_params >= 2:
+            factors.append(0.5)
+        else:
+            factors.append(0.3)
+        
+        # Factor 2: Parameter consistency
+        values = [p['normalized'] for p in normalized_params.values()]
+        if len(values) > 1:
+            std_dev = np.std(values)
+            consistency = 1.0 - min(std_dev, 0.5) * 2
+            factors.append(consistency)
+        
+        # Factor 3: Method-specific confidence
+        method = integrated.get('method', '')
+        if method == 'bayesian':
+            factors.append(0.8)
+        elif method == 'fuzzy':
+            factors.append(0.7)
+        else:  # weighted_average
+            factors.append(0.6)
+        
+        # Factor 4: Score extremity (more confidence in extreme values)
+        score = integrated.get('score', 0.5)
+        extremity = 1.0 - abs(score - 0.5) * 2
+        factors.append(extremity)
+        
+        # Combine factors
+        confidence = np.mean(factors) if factors else 0.5
+        
+        return float(np.clip(confidence, 0.1, 0.95))
+    
+    def _determine_alert_level(self, score: float) -> str:
+        """Determine alert level based on score."""
+        alert_levels = self.config['alert_levels']
+        
+        for level, (min_val, max_val) in alert_levels.items():
+            if min_val <= score < max_val:
+                return level
+        
+        return 'normal'
+    
+    def _get_default_result(self) -> Dict[str, Any]:
+        """Return default integration result."""
+        return {
+            'timestamp': pd.Timestamp.now().isoformat(),
+            'parameters': {},
+            'integrated_score': 0.5,
+            'confidence': 0.3,
+            'alert_level': 'normal',
+            'contributions': {},
+            'uncertainties': {},
+            'metadata': {
+                'method': 'default',
+                'error': 'Integration failed',
+                'parameters_used': []
+            }
+        }
+    
+    def integrate_time_series(self, time_series: pd.DataFrame,
+                            parameter_columns: List[str]) -> pd.DataFrame:
+        """
+        Integrate parameters over time series.
+        
+        Args:
+            time_series: DataFrame with time index and parameter columns
+            parameter_columns: List of column names to integrate
+            
+        Returns:
+            DataFrame with integration results
+        """
+        results = []
+        
+        for idx, row in time_series.iterrows():
+            # Extract parameters for this time point
+            parameters = {}
+            for col in parameter_columns:
+                if col in row and not pd.isna(row[col]):
+                    parameters[col] = float(row[col])
+            
+            # Integrate
+            integration_result = self.integrate(parameters)
+            
+            # Add to results
+            result_row = {
+                'timestamp': idx if hasattr(idx, 'isoformat') else pd.Timestamp(idx),
+                'integrated_score': integration_result['integrated_score'],
+                'confidence': integration_result['confidence'],
+                'alert_level': integration_result['alert_level']
+            }
+            
+            # Add individual parameter values
+            for param_name, param_value in parameters.items():
+                result_row[f'param_{param_name}'] = param_value
+            
+            results.append(result_row)
+        
+        return pd.DataFrame(results)
+
+def integrate_simple(parameters: Dict[str, float], 
+                    weights: Optional[Dict[str, float]] = None) -> float:
+    """
+    Simple integration function.
+    
+    Args:
+        parameters: Parameter values
+        weights: Optional custom weights
+        
+    Returns:
+        Integrated score
+    """
+    integrator = ParameterIntegrator()
+    if weights:
+        integrator.config['parameter_weights'] = weights
+    
+    result = integrator.integrate(parameters)
+    return result['integrated_score']

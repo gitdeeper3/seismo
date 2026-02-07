@@ -1,0 +1,51 @@
+# Seismo Framework - Default Configuration
+
+monitoring:
+  interval: 60  # seconds
+  retention_days: 30
+  alert_threshold: 0.7
+  enable_alerts: true
+  
+logging:
+  level: INFO
+  file: logs/seismo.log
+  max_size_mb: 10
+  backup_count: 5
+
+parameters:
+  weights:
+    seismic: 0.20
+    deformation: 0.15
+    hydrogeological: 0.12
+    electrical: 0.10
+    magnetic: 0.10
+    instability: 0.15
+    stress: 0.10
+    rock_properties: 0.08
+  
+  thresholds:
+    normal: 0.3
+    elevated: 0.5
+    watch: 0.7
+    warning: 1.0
+
+reports:
+  daily_enabled: true
+  weekly_enabled: true
+  monthly_enabled: true
+  alert_reports_enabled: true
+  
+  formats:
+    - txt
+    - csv
+    - json
+
+data:
+  retention_days: 365
+  backup_enabled: true
+  backup_location: data/backups/
+  
+  export:
+    enabled: true
+    format: csv
+    location: data/exports/
