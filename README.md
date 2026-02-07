@@ -239,6 +239,20 @@ Warning: Seismo is a decision support tool, not a replacement for professional s
 
 ---
 
+
+## 📋 Changelog
+
+For detailed release notes and version history, see [CHANGELOG.md](CHANGELOG.md).
+
+### Recent Releases:
+- **v1.0.0** (2026-02-07): Initial public release with 8 parameter analyzers, advanced integration system, and comprehensive test suite.
+
+---
+
+*Seismo Framework follows [Semantic Versioning](https://semver.org/) and [Keep a Changelog](https://keepachangelog.com/) standards.*
+
+---
+
 Copyright © 2026 Samir Baladi & Seismo Framework Contributors
 All rights reserved under MIT License
 
