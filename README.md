@@ -178,10 +178,10 @@ Research Areas:
 
 Repository Access:
 
-· Primary: GitLab
-· Mirror: GitHub
-· Backup: Bitbucket
-· Open Source: Codeberg
+· Primary: https://gitlab.com/gitdeeper3/seismo
+· Mirror: https://github.com/gitdeeper3/seismo
+· Backup: https://bitbucket.org/gitdeeper3/seismo
+· Open Source: https://codeberg.org/gitdeeper2/seismo
 
 🌐 Project Links
 
