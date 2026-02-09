@@ -1,298 +1,170 @@
-# Installation Guide
 
-## System Requirements
+Installation Guide
 
-### Minimum Requirements
-- **CPU**: 4 cores
-- **RAM**: 8 GB
-- **Storage**: 50 GB free space
-- **OS**: Linux, macOS, or Windows 10/11
-- **Python**: 3.9 or higher
+📦 PyPI Installation (Recommended)
 
-### Recommended Requirements
-- **CPU**: 8+ cores
-- **RAM**: 16+ GB
-- **Storage**: 100+ GB (for data storage)
-- **GPU**: NVIDIA CUDA compatible (optional, for ML features)
+Basic Installation
 
-## Installation Methods
-
-### Method 1: PyPI Installation (Recommended)
 ```bash
-# Install from PyPI
-pip install seismo-framework
-
-# Install with optional dependencies
-pip install seismo-framework[full]
-
-# Install for development
-pip install seismo-framework[dev]
+pip install seismo-framework==2.0.2
 ```
 
-Method 2: Source Installation
+Installation with Optional Dependencies
 
 ```bash
-# Clone repository
+pip install seismo-framework[dev]==2.0.2
+```
+
+🔧 Source Installation
+
+Clone Repository
+
+```bash
 git clone https://gitlab.com/gitdeeper3/seismo.git
 cd seismo
+```
 
-# Install in development mode
+Install in Development Mode
+
+```bash
 pip install -e .
-
-# Install with all features
-pip install -e .[full,dev,test]
 ```
 
-Method 3: Docker Installation
+Install with Development Tools
 
 ```bash
-# Pull Docker image
-docker pull gitdeeper3/seismo:latest
-
-# Run container
-docker run -d \
-  -p 8080:8080 \
-  -v $(pwd)/data:/app/data \
-  -v $(pwd)/config:/app/config \
-  --name seismo-monitoring \
-  gitdeeper3/seismo:latest
+pip install -e .[dev]
 ```
 
-Platform-Specific Instructions
+🐳 Docker Installation
 
-Linux (Ubuntu/Debian)
+Build Docker Image
 
 ```bash
-# Update system
-sudo apt update && sudo apt upgrade -y
-
-# Install system dependencies
-sudo apt install -y \
-    python3-pip \
-    python3-venv \
-    build-essential \
-    libhdf5-dev \
-    libnetcdf-dev
-
-# Install Seismo
-pip3 install seismo-framework[full]
+docker build -f docker/Dockerfile -t seismo-framework .
 ```
 
-macOS
+Run Container
 
 ```bash
-# Install Homebrew if not installed
-/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
-
-# Install dependencies
-brew install python hdf5 netcdf
-
-# Install Seismo
-pip3 install seismo-framework[full]
+docker run -p 8000:8000 seismo-framework
 ```
 
-Windows
+Access Services
 
-```powershell
-# Install Python from python.org
-# Make sure to check "Add Python to PATH"
+· API Documentation: http://localhost:8000/docs
+· Dashboard: http://localhost:8000/dashboard
+· REST API: http://localhost:8000/api/v1
 
-# Open PowerShell as Administrator
-# Install Seismo
-pip install seismo-framework
+📋 System Requirements
 
-# If you encounter errors, try:
-pip install --user seismo-framework
-```
+Python Versions
 
-Configuration
+· Python 3.8 or higher
+· Recommended: Python 3.10+
 
-Initial Setup
+Operating Systems
+
+· Linux (Ubuntu, Debian, CentOS)
+· macOS (10.15+)
+· Windows (WSL2 recommended)
+
+Hardware Requirements
+
+· Minimum: 2GB RAM, 1GB disk space
+· Recommended: 4GB RAM, 2GB disk space
+· For large datasets: 8GB+ RAM, 10GB+ disk space
+
+🔍 Verification
+
+Check Installation
 
 ```bash
-# Generate default configuration
-seismo-config init --region global
-
-# Configure database
-seismo-config database --type postgresql --host localhost --port 5432
-
-# Setup monitoring stations
-seismo-config stations import stations.csv
+python -c "import seismo_framework; print(f'Seismo Framework {seismo_framework.__version__} installed successfully')"
 ```
 
-Environment Variables
+Run Tests
 
 ```bash
-# Copy example environment file
-cp config/.env.example config/.env
-
-# Edit environment variables
-nano config/.env
+./scripts/run_all_tests.sh
 ```
 
-Example .env file:
-
-```ini
-# Database Configuration
-DB_HOST=localhost
-DB_PORT=5432
-DB_NAME=seismo
-DB_USER=seismo_user
-DB_PASSWORD=your_password
-
-# API Keys (optional)
-USGS_API_KEY=your_usgs_key
-GNSS_API_KEY=your_gnss_key
-
-# Monitoring Settings
-MONITORING_INTERVAL=60
-ALERT_THRESHOLD=0.7
-LOG_LEVEL=INFO
-```
-
-Verification
-
-Test Installation
+Check Dependencies
 
 ```bash
-# Check installation
-python -c "import seismo; print(seismo.__version__)"
-
-# Run basic test
-python -m pytest tests/test_basic.py -v
-
-# Start test server
-python -m seismo.monitoring.dashboard --test-mode
+pip show seismo-framework
 ```
 
-Verify Dependencies
-
-```bash
-# Check all dependencies
-python -c "import seismo; seismo.check_dependencies()"
-
-# Output should show:
-# ✓ numpy 1.24.0
-# ✓ scipy 1.10.0
-# ✓ pandas 2.0.0
-# ... all dependencies OK
-```
-
-Troubleshooting
+⚠️ Troubleshooting
 
 Common Issues
 
 1. Permission Errors
-
-```bash
-# Fix: Use virtual environment
-python -m venv venv
-source venv/bin/activate  # Linux/Mac
-# venv\Scripts\activate   # Windows
-pip install seismo-framework
-```
-
-2. Missing Dependencies
-
-```bash
-# On Ubuntu/Debian
-sudo apt install python3-dev build-essential
-
-# On macOS
-brew install gcc
-```
-
-3. HDF5/NetCDF Issues
-
-```bash
-# Install system libraries
-sudo apt install libhdf5-dev libnetcdf-dev  # Ubuntu/Debian
-brew install hdf5 netcdf                    # macOS
-```
-
-4. Memory Issues
-
-```bash
-# Reduce memory usage
-export OMP_NUM_THREADS=1
-export OPENBLAS_NUM_THREADS=1
-
-# Or configure in Python
-import os
-os.environ['OMP_NUM_THREADS'] = '1'
-```
+   ```bash
+   pip install --user seismo-framework==2.0.2
+   ```
+2. Dependency Conflicts
+   ```bash
+   pip install seismo-framework==2.0.2 --no-deps
+   pip install numpy scipy pandas fastapi uvicorn
+   ```
+3. Python Version Issues
+   ```bash
+   python --version  # Should be 3.8+
+   ```
+4. Network Issues
+   ```bash
+   pip install seismo-framework==2.0.2 -i https://pypi.org/simple
+   ```
 
 Getting Help
 
-```bash
-# Check documentation
-seismo --help
-
-# View logs
-tail -f logs/installation.log
-
-# Report issues
-seismo bug-report
-```
-
-Updates
-
-Update Procedure
-
-```bash
-# Update from PyPI
-pip install --upgrade seismo-framework
-
-# Update from source
-cd seismo
-git pull origin main
-pip install -e . --upgrade
-
-# Update Docker container
-docker pull gitdeeper3/seismo:latest
-docker-compose down
-docker-compose up -d
-```
-
-Version Compatibility
-
-· v0.1.x: Python 3.9+
-· v0.2.x: Python 3.10+ (planned)
-· Check pyproject.toml for exact requirements
-
-Uninstallation
-
-Complete Removal
-
-```bash
-# Uninstall package
-pip uninstall seismo-framework
-
-# Remove configuration files
-rm -rf ~/.config/seismo
-rm -rf ~/.cache/seismo
-
-# Remove Docker containers
-docker stop seismo-monitoring
-docker rm seismo-monitoring
-docker rmi gitdeeper3/seismo:latest
-```
-
-Partial Removal (keep data)
-
-```bash
-# Keep data but remove application
-pip uninstall seismo-framework
-
-# Data remains in:
-# ~/.local/share/seismo/data/
-# /app/data/ (Docker volumes)
-```
-
-Support
-
-For installation issues:
-
-· Email: gitdeeper@gmail.com
-· Documentation: https://seismo.netlify.app/installation
+· Documentation: https://seismo.netlify.app/documentation
 · Issues: https://gitlab.com/gitdeeper3/seismo/-/issues
+· Email: gitdeeper@gmail.com
+
+🔄 Upgrading
+
+From Previous Version
+
+```bash
+pip install --upgrade seismo-framework==2.0.2
+```
+
+Clean Upgrade
+
+```bash
+pip uninstall seismo-framework -y
+pip install seismo-framework==2.0.2
+```
+
+📊 Installation Methods Comparison
+
+Method Pros Cons Use Case
+PyPI Simple, automatic updates Limited customization Production, quick start
+Source Full control, development Manual updates Development, customization
+Docker Isolated, reproducible Larger footprint Deployment, testing
+
+🎯 Quick Verification Script
+
+```bash
+#!/bin/bash
+# verify_installation.sh
+
+echo "🔍 Verifying Seismo Framework Installation..."
+
+# Check Python version
+python --version | grep -q "Python 3" && echo "✅ Python 3.x" || echo "❌ Python 3 required"
+
+# Try to import
+python3 -c "import seismo_framework" 2>/dev/null && echo "✅ Import successful" || echo "❌ Import failed"
+
+# Check version
+python3 -c "import seismo_framework; print(f'✅ Version: {getattr(seismo_framework, \"__version__\", \"unknown\")}')"
+
+echo "🎉 Verification complete!"
+```
+
+---
+
+Last updated: $(date +%Y-%m-%d)

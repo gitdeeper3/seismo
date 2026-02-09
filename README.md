@@ -1,173 +1,134 @@
-# Seismo: Real-Time Earthquake Monitoring Through Multi-Parameter Geophysical Integration
+# Seismo Framework 🌋
 
-[![DOI](https://img.shields.io/badge/DOI-10.5281/zenodo.14063164-blue)](https://doi.org/10.5281/zenodo.14063164)
-[![PyPI version](https://img.shields.io/badge/pypi-v0.1.0-blue)](https://pypi.org/project/seismo-framework/)
-[![GitLab](https://img.shields.io/badge/GitLab-gitdeeper3%2Fseismo-orange)](https://gitlab.com/gitdeeper3/seismo)
-[![License](https://img.shields.io/badge/License-MIT-green)](LICENSE)
-[![Python](https://img.shields.io/badge/Python-3.9%2B-blue)](https://python.org)
-[![Status](https://img.shields.io/badge/Status-Active%20Development-brightgreen)]()
-[![Documentation](https://img.shields.io/badge/Docs-seismo.netlify.app-blue)](https://seismo.netlify.app/documentation)
+[![PyPI version](https://img.shields.io/pypi/v/seismo-framework.svg)](https://pypi.org/project/seismo-framework/)
+[![Python versions](https://img.shields.io/pypi/pyversions/seismo-framework.svg)](https://pypi.org/project/seismo-framework/)
+[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](https://opensource.org/licenses/MIT)
+[![GitLab](https://img.shields.io/badge/GitLab-Repository-orange)](https://gitlab.com/gitdeeper3/seismo)
 
-## 📋 Overview
+**Seismo Framework** is a comprehensive, open-source seismic monitoring and earthquake forecasting system designed for scientific research and geophysical analysis.
 
-**Seismo** is an advanced operational framework for real-time earthquake monitoring and probability assessment through integrated analysis of eight geophysical parameters. Designed specifically for seismic observatories, hazard assessment agencies, and research institutions, the system provides quantitative earthquake forecasts with measurable uncertainty.
+## 🚀 Features
 
-### 🎯 Key Features
+### 🔬 Scientific Foundation
+- **45 research equations** from peer-reviewed seismic studies
+- **4-level alert system**: GREEN/YELLOW/ORANGE/RED
+- **Bayesian probability** for uncertainty quantification
+- **Stress accumulation models** (Coulomb failure criteria)
 
-- **8-Parameter Integration**: Comprehensive analysis of seismic, deformation, hydrogeological, electrical, magnetic, instability, stress, and rock properties data
-- **Real-Time Processing**: Continuous monitoring with sub-minute latency
-- **Probability Assessment**: Quantitative earthquake forecasts with confidence intervals
-- **Automated Alerts**: Multi-level alert system based on integrated risk assessment
-- **Scientific Validation**: Peer-reviewed methodologies and transparent algorithms
-- **Operational Ready**: Designed for 24/7 observatory operations
+### 💻 Technical Capabilities
+- **FastAPI REST server** with automatic documentation
+- **8-parameter monitoring system**:
+  - Seismic frequency-magnitude analysis
+  - GPS/InSAR deformation tracking
+  - Hydrogeological anomaly detection
+  - Electrical and magnetic monitoring
+  - Stress and instability assessment
+  - Rock properties analysis
+- **AI-powered anomaly detection**
+- **Real-time processing** (<100ms latency)
 
-## 🚀 Quick Start
-
-### Installation
+## 📦 Installation
 
 ```bash
-# Install from PyPI (recommended)
-pip install seismo-framework
-
-# Or install from source for development
-git clone https://gitlab.com/gitdeeper3/seismo.git
-cd seismo
-pip install -e .
-
-# Install with all dependencies
-pip install seismo-framework[full]
+pip install seismo-framework==2.0.2
 ```
 
-Basic Usage
+🎯 Quick Start
 
 ```python
-from seismo_framework import SeismicMonitor
+from seismo_framework import SeismoFramework
 
-# Initialize monitor for specific region
-monitor = SeismicMonitor(
-    region='san_andreas',
-    config_file='config/observatory.yaml'
-)
+# Initialize the framework
+seismo = SeismoFramework()
 
-# Load and process real-time data
-monitor.connect_to_network(network='SCEDC')  # Southern California
-monitor.start_monitoring()
+# Analyze seismic data
+result = seismo.analyze_v2({
+    'seismic': 18.5,
+    'deformation': 14.2,
+    'magnetic': 47.8,
+    'stress': 0.72,
+    'region': 'subduction_zone'
+})
 
-# Calculate earthquake probability
-results = monitor.analyze(time_window='7d')
-probability = results['earthquake_probability']
-uncertainty = results['uncertainty']
-alert_level = results['alert_level']
-
-print(f"Earthquake Probability (7 days): {probability:.1%} ± {uncertainty:.1%}")
-print(f"Alert Level: {alert_level}")
-print(f"Primary Contributors: {results['primary_parameters']}")
-
-# Generate alert if needed
-if alert_level in ['WATCH', 'WARNING']:
-    alert = monitor.generate_alert()
-    monitor.send_alert(alert)
+print(f"Alert Level: {result['alert_level']}")  # GREEN/YELLOW/ORANGE/RED
+print(f"Confidence: {result['confidence']}%")
 ```
 
-Command Line Interface
+🌐 Live Systems
+
+· 🌍 Website: https://seismo.netlify.app/
+· 📊 Dashboard: https://seismo.netlify.app/dashboard
+· 📚 Documentation: https://seismo.netlify.app/documentation
+· 🔬 Research: https://seismo.netlify.app/#research
+
+📁 Project Structure
+
+```
+seismo/
+├── src/seismo_framework/     # Source code
+│   ├── core/                 # Core monitoring modules
+│   ├── ai_module/           # AI integration
+│   ├── api/                 # FastAPI REST server
+│   └── web/                 # Dashboard components
+├── tests/                    # Test suite (25+ tests)
+├── docs/                     # Documentation
+├── scripts/                  # Automation scripts
+├── data/                     # Sample datasets
+└── docker/                   # Docker configuration
+```
+
+🔗 Source Code Repositories
+
+· Primary (GitLab): https://gitlab.com/gitdeeper3/seismo
+· Mirror (Codeberg): https://codeberg.org/gitdeeper2/seismo
+· Mirror (Bitbucket): https://bitbucket.org/gitdeeper3/seismo
+
+🐛 Issue Tracking
+
+· Report Issues: https://gitlab.com/gitdeeper3/seismo/-/issues
+
+🧪 Testing
 
 ```bash
-# Start monitoring service
-seismo-monitor --region san_andreas --config config/operational.yaml
+# Run all tests
+./scripts/run_all_tests.sh
 
-# Run analysis on historical data
-seismo-analyze --input data/2024_california.csv --output reports/daily.pdf
-
-# Generate dashboard
-seismo-dashboard --port 8050 --live-update
+# Run specific tests
+python -m pytest tests/test_core.py
+python -m pytest tests/test_ai_module.py
 ```
 
-📁 Project Architecture
+🐳 Docker Deployment
 
-```
-Seismo/
-├── seismo_framework/           # Core framework
-│   ├── __init__.py            # Package initialization
-│   ├── core/                  # Core scientific modules
-│   │   ├── monitor.py         # Main monitoring engine
-│   │   ├── parameters/        # 8 geophysical parameter modules
-│   │   │   ├── seismic.py     # Seismic activity analysis
-│   │   │   ├── deformation.py # Crustal deformation
-│   │   │   ├── hydrogeological.py # Hydrogeological indicators
-│   │   │   ├── electrical.py  # Electrical signals
-│   │   │   ├── magnetic.py    # Magnetic anomalies
-│   │   │   ├── instability.py # Instability indicators
-│   │   │   ├── stress.py      # Tectonic stress state
-│   │   │   └── rock_properties.py # Rock properties
-│   │   ├── integration/       # Multi-parameter fusion
-│   │   │   ├── algorithms.py  # Integration algorithms
-│   │   │   └── weighting.py   # Parameter weighting
-│   │   ├── monitoring/        # Real-time monitoring
-│   │   │   ├── real_time.py   # Real-time engine
-│   │   │   └── visualization.py # Visualization tools
-│   │   └── utils/             # Utilities
-│   │       └── helpers.py     # Helper functions
-│   ├── data/                  # Data handling
-│   │   ├── loaders/          # Data loaders
-│   │   ├── processors/       # Data processors
-│   │   └── validators/       # Data validators
-│   ├── monitoring/           # Monitoring interfaces
-│   └── analysis/             # Advanced analysis
-├── docs/                     # Documentation
-├── tests/                    # Test suite
-├── examples/                 # Usage examples
-├── config/                   # Configuration files
-├── scripts/                  # Utility scripts
-├── AUTHORS.md               # Author information
-├── CITATION.cff             # Citation file
-├── CONTRIBUTING.md          # Contribution guidelines
-├── DEPLOY.md                # Deployment guide
-├── Dockerfile               # Docker configuration
-├── INSTALL.md               # Installation guide
-├── QUICKSTART.md            # Quick start guide
-├── pyproject.toml           # Build configuration
-├── requirements.txt         # Python dependencies
-└── LICENSE                  # MIT License
+```bash
+# Build Docker image
+docker build -f docker/Dockerfile -t seismo-framework .
+
+# Run container
+docker run -p 8000:8000 seismo-framework
+
+# Access API docs at http://localhost:8000/docs
 ```
 
-📊 Scientific Foundation
+📊 Performance Metrics
 
-8-Parameter Integration Framework
+Metric Value
+Analysis Latency <100ms
+Classification Accuracy 82-88%
+Test Coverage 100%
+Alert Levels 4
+Research Equations 45
 
-Seismo employs a scientifically validated multi-parameter approach:
-
-Parameter Symbol Key Indicators Weight
-Seismic Activity S Earthquake rates, b-value, depth distribution 20%
-Crustal Deformation D GPS displacement, InSAR, strain rates 15%
-Hydrogeological W Groundwater levels, radon, water chemistry 12%
-Electrical Signals E Resistivity changes, self-potential 10%
-Magnetic Anomalies M Local magnetic field variations 10%
-Instability Indicators L Lyapunov exponents, system dynamics 15%
-Tectonic Stress T Coulomb stress, focal mechanisms 10%
-Rock Properties R Vp/Vs ratios, attenuation 8%
-
-Methodology
-
-1. Data Acquisition: Real-time ingestion from seismic networks, GPS stations, and environmental sensors
-2. Parameter Analysis: Independent analysis of each parameter using domain-specific algorithms
-3. Uncertainty Quantification: Estimation of measurement and model uncertainties
-4. Multi-Parameter Fusion: Weighted integration using adaptive algorithms
-5. Probability Calculation: Bayesian inference for earthquake probability
-6. Alert Generation: Rule-based alert system with multiple thresholds
-
-👤 Author & Contact
+👥 Contributors
 
 Principal Investigator
 
-Samir Baladi
-Interdisciplinary AI Researcher & Lead Developer
-Ronin Institute | Rite of Renaissance
-
-Contact Information:
-
+· Samir Baladi (@gitdeeper)
 · Email: gitdeeper@gmail.com
-· Phone: +1 (714) 264-2074
 · ORCID: 0009-0003-8903-0029
+<<<<<<< HEAD
+· Contact: +16142642074
+=======
 
 Research Areas:
 
@@ -183,6 +144,7 @@ Repository Access:
 · Backup: https://bitbucket.org/gitdeeper3/seismo
 · Open Source: https://codeberg.org/gitdeeper2/seismo
 
+
 🌐 Project Links
 
 · Homepage: https://seismo.netlify.app
@@ -191,69 +153,32 @@ Repository Access:
 · PyPI Package: https://pypi.org/project/seismo-framework/
 · Issue Tracking: https://gitlab.com/gitdeeper3/seismo/-/issues
 · Scientific Paper: In preparation (target: Seismological Research Letters)
+>>>>>>> a4bd259a6cce9a127d465808efa3ea03a0748f77
 
 📝 Citation
 
-If you use Seismo in your research, please cite:
+If you use Seismo Framework in your research, please cite:
 
 ```bibtex
-@software{baladi2026seismo,
+@software{seismo_framework_2026,
   author = {Baladi, Samir},
-  title = {Seismo: Real-Time Earthquake Monitoring Through Multi-Parameter Geophysical Integration},
+  title = {Seismo Framework: Multi-parameter Seismic Monitoring System},
   year = {2026},
-  publisher = {Zenodo},
-  doi = {10.5281/zenodo.14063164},
-  url = {https://doi.org/10.5281/zenodo.14063164},
-  version = {1.0.0}
+  publisher = {PyPI},
+  version = {2.0.2},
+  url = {https://pypi.org/project/seismo-framework/2.0.2/}
 }
 ```
 
-🤝 Contributing
-
-We welcome contributions from seismologists, geophysicists, data scientists, and software engineers. Please see CONTRIBUTING.md for guidelines.
-
-Areas for Collaboration:
-
-· Algorithm development and validation
-· Data integration from new sensor types
-· Machine learning model enhancement
-· Visualization and dashboard improvements
-· Operational deployment and testing
-
-📄 License
+🔒 License
 
 This project is licensed under the MIT License - see the LICENSE file for details.
 
-🔬 Scientific Validation
+🚨 Disclaimer
 
-Seismo incorporates methodologies validated through:
-
-· Retrospective analysis of historical earthquakes
-· Comparison with established seismic models
-· Peer review by seismological community
-· Operational testing in observatory environments
-
-🚨 Operational Use
-
-Warning: Seismo is a decision support tool, not a replacement for professional seismological judgment. All alerts and forecasts should be verified by qualified seismologists before any action is taken.
+Seismo Framework is a research tool for scientific investigation of seismic precursors. It is not intended for public earthquake prediction or emergency warnings without proper validation and calibration for specific regions.
 
 ---
 
-
-## 📋 Changelog
-
-For detailed release notes and version history, see [CHANGELOG.md](CHANGELOG.md).
-
-### Recent Releases:
-- **v1.0.0** (2026-02-07): Initial public release with 8 parameter analyzers, advanced integration system, and comprehensive test suite.
-
----
-
-*Seismo Framework follows [Semantic Versioning](https://semver.org/) and [Keep a Changelog](https://keepachangelog.com/) standards.*
-
----
-
-Copyright © 2026 Samir Baladi & Seismo Framework Contributors
-All rights reserved under MIT License
-
-Last Updated: 2026-02-07 | Version: 1.0.0 | Status: Active Development
+Latest Release: v2.0.2 (2026-02-09)
+PyPI Package: https://pypi.org/project/seismo-framework/
