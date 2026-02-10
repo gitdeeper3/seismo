@@ -3,9 +3,12 @@
 [![PyPI version](https://img.shields.io/pypi/v/seismo-framework.svg)](https://pypi.org/project/seismo-framework/)
 [![OSF](https://img.shields.io/badge/OSF-Preregistration-blue)](https://osf.io/pm3fq)
 [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.18563973.svg)](https://doi.org/10.5281/zenodo.18563973)
+[![GitLab](https://img.shields.io/badge/GitLab-Repository-orange)](https://gitlab.com/gitdeeper3/seismo)
+[![GitHub](https://img.shields.io/badge/GitHub-Mirror-black)](https://github.com/gitdeeper3/seismo)
+[![Bitbucket](https://img.shields.io/badge/Bitbucket-Mirror-blue)](https://bitbucket.org/gitdeeper3/seismo/)
+[![Codeberg](https://img.shields.io/badge/Codeberg-Mirror-green)](https://codeberg.org/gitdeeper2/seismo/)
 [![Python versions](https://img.shields.io/pypi/pyversions/seismo-framework.svg)](https://pypi.org/project/seismo-framework/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](https://opensource.org/licenses/MIT)
-[![GitLab](https://img.shields.io/badge/GitLab-Repository-orange)](https://gitlab.com/gitdeeper3/seismo)
 
 **Seismo Framework** is a comprehensive, open-source seismic monitoring and earthquake forecasting system designed for scientific research and geophysical analysis.
 
@@ -66,24 +69,115 @@ print(f"Confidence: {result['confidence']}%")
 📁 Project Structure
 
 ```
-seismo/
-├── src/seismo_framework/     # Source code
-│   ├── core/                 # Core monitoring modules
-│   ├── ai_module/           # AI integration
-│   ├── api/                 # FastAPI REST server
-│   └── web/                 # Dashboard components
-├── tests/                    # Test suite (25+ tests)
-├── docs/                     # Documentation
-├── scripts/                  # Automation scripts
-├── data/                     # Sample datasets
-└── docker/                   # Docker configuration
+.
+├── AUTHORS.md                    # Project contributors
+├── CHANGELOG.md                  # Version history
+├── CITATION.cff                  # Citation metadata
+├── CONTRIBUTING.md               # Contribution guidelines
+├── DEPLOY.md                     # Deployment instructions
+├── Dockerfile.txt                # Docker documentation
+├── INSTALL.md                    # Installation guide
+├── LICENSE                       # MIT License
+├── MANIFEST.in                   # Package inclusion rules
+├── OSF_REGISTRATION.md          # OSF Preregistration docs
+├── QUICKSTART.md                 # Quick start guide
+├── README.md                     # This file
+├── README_PYPI.md               # PyPI package description
+├── RELEASE_NOTES.md             # Release notes
+├── Seismo.zip                   # Complete project archive
+├── config/                       # Configuration files
+├── data/                         # Data storage
+│   ├── enhanced/                # Enhanced datasets
+│   ├── exports/                 # Data exports
+│   └── samples/                 # Sample data
+├── dist/                         # Built packages
+│   ├── seismo_framework-2.0.2-py3-none-any.whl
+│   └── seismo_framework-2.0.2.tar.gz
+├── docker/                       # Docker configuration
+│   └── Dockerfile
+├── docs/                         # Documentation
+│   ├── api/                     # API documentation
+│   ├── research/                # Research papers
+│   │   ├── Seismo_Research_Paper.docx
+│   │   ├── Seismo_Research_Paper.pdf
+│   │   └── zenodo_troubleshooting_guide.md
+│   └── user_guide/              # User documentation
+│       ├── AI_MODULE_API.md
+│       ├── AUTHORS.md
+│       ├── CHANGELOG.md
+│       ├── CONTRIBUTING.md
+│       ├── DEPLOY.md
+│       ├── INSTALL.md
+│       ├── QUICKSTART.md
+│       ├── README.md
+│       └── README_PYPI.md
+├── pyproject.toml                # Build configuration
+├── reports/                      # Generated reports
+│   ├── alerts/                  # Alert reports
+│   ├── daily/                   # Daily reports
+│   ├── enhanced/                # Enhanced analysis
+│   ├── validation/              # Validation reports
+│   └── weekly/                  # Weekly summaries
+├── requirements.txt              # Dependencies
+├── requirements_no_gui.txt       # Minimal dependencies
+├── scripts/                      # Automation scripts
+│   ├── build/                   # Build scripts
+│   ├── deployment/              # Deployment scripts
+│   ├── run_ai_directly.py       # AI testing
+│   ├── run_all_tests.sh         # Test runner
+│   ├── run_seismo_simulation.py # Simulation
+│   ├── run_tests.py             # Test runner
+│   └── utilities/               # Utility scripts
+├── src/                          # Source code
+│   └── seismo_framework/        # Main package
+│       ├── __init__.py          # Package initialization
+│       ├── ai_module/           # AI components
+│       ├── api/                 # FastAPI server
+│       ├── config/              # Configuration
+│       ├── core/                # Core modules
+│       ├── data/                # Data handling
+│       ├── deployment.py        # Deployment
+│       ├── integration.py       # Multi-parameter integration
+│       ├── test_ai_fixed.py     # AI tests
+│       ├── test_ai_module.py    # AI module tests
+│       ├── test_local_ai.py     # Local AI tests
+│       ├── training.py          # Model training
+│       ├── utils/               # Utilities
+│       └── web/                 # Web components
+├── tests/                        # Test suite
+│   ├── __init__.py
+│   ├── __pycache__/
+│   ├── config/
+│   ├── data/
+│   ├── enhanced_test.py
+│   ├── final_validation.py
+│   ├── integration/
+│   ├── minimal_test.py
+│   ├── organize_project.py
+│   ├── practical_example.py
+│   ├── reports/
+│   ├── run_all_tests.py
+│   ├── test_alerts.py
+│   ├── test_basic_functionality.py
+│   ├── test_complete_model.py
+│   ├── test_comprehensive_v2.py
+│   ├── test_core.py
+│   ├── test_integration.py
+│   ├── test_no_scipy.py
+│   ├── test_seismo.py
+│   └── unit/
+└── wiki/
+    └── Home.md                  # Project wiki
+
+47 directories, 103 files
 ```
 
 🔗 Source Code Repositories
 
 · Primary (GitLab): https://gitlab.com/gitdeeper3/seismo
-· Mirror (Codeberg): https://codeberg.org/gitdeeper2/seismo
-· Mirror (Bitbucket): https://bitbucket.org/gitdeeper3/seismo
+· GitHub Mirror: https://github.com/gitdeeper3/seismo
+· Bitbucket Mirror: https://bitbucket.org/gitdeeper3/seismo
+· Codeberg Mirror: https://codeberg.org/gitdeeper2/seismo
 
 🐛 Issue Tracking
 
@@ -130,65 +224,48 @@ Principal Investigator
 · ORCID: 0009-0003-8903-0029
 · Contact: +16142642074
 
-
-Research Areas:
-
-· Real-time seismic monitoring systems
-· Multi-parameter geophysical integration
-· Earthquake probability assessment
-· Automated decision support frameworks
-
-Repository Access:
-
-· Primary: https://gitlab.com/gitdeeper3/seismo
-· Mirror: https://github.com/gitdeeper3/seismo
-· Backup: https://bitbucket.org/gitdeeper3/seismo
-· Open Source: https://codeberg.org/gitdeeper2/seismo
-
-
-🌐 Project Links
-
-· Homepage: https://seismo.netlify.app
-· Live Dashboard: https://seismo.netlify.app/dashboard
-· Documentation: https://seismo.netlify.app/documentation
-· PyPI Package: https://pypi.org/project/seismo-framework/
-· Issue Tracking: https://gitlab.com/gitdeeper3/seismo/-/issues
-· Scientific Paper: In preparation (target: Seismological Research Letters)
->>>>>>> a4bd259a6cce9a127d465808efa3ea03a0748f77
-
 📝 Citation
 
 If you use Seismo Framework in your research, please cite:
 
-APA Style:
+APA Style (Zenodo):
 
 ```bibtex
 @software{baladi_seismo_2026,
   author = {Baladi, Samir},
-    title = {An Eight-Parameter Assessment Framework for Tectonic Stress Evolution and Major Earthquake Probability Forecasting},
-      year = {2026},
-        publisher = {Zenodo},
-          version = {2.0.0},
-            doi = {10.5281/zenodo.18563973},
-              url = {https://doi.org/10.5281/zenodo.18563973}
-              }
-              ```
+  title = {An Eight-Parameter Assessment Framework for Tectonic Stress Evolution and Major Earthquake Probability Forecasting},
+  year = {2026},
+  publisher = {Zenodo},
+  version = {2.0.2},
+  doi = {10.5281/zenodo.18563973},
+  url = {https://doi.org/10.5281/zenodo.18563973}
+}
+```
 
-              BibTeX:
+BibTeX (PyPI Package):
 
-              ```bibtex
-              @software{seismo_framework_2026,
-                author = {Samir Baladi},
-                  title = {Seismo Framework: Multi-parameter Seismic Monitoring System},
-                    year = {2026},
-                      month = {February},
-                        publisher = {Zenodo},
-                          doi = {10.5281/zenodo.18563973},
-                            url = {https://zenodo.org/records/18563973},
-                              version = {2.0.0},
-                                note = {Software for tectonic stress evolution and earthquake probability forecasting}
-                                }
-                                ```
+```bibtex
+@software{seismo_framework_2026,
+  author = {Baladi, Samir},
+  title = {Seismo Framework: Multi-parameter Seismic Monitoring System},
+  year = {2026},
+  publisher = {PyPI},
+  version = {2.0.2},
+  url = {https://pypi.org/project/seismo-framework/2.0.2/}
+}
+```
+
+Chicago Style (OSF Preregistration):
+
+```bibtex
+@software{baladi_osf_2026,
+  author = {Baladi, Samir},
+  title = {OSF Preregistration: An Eight-Parameter Assessment Framework for Tectonic Stress Evolution and Major Earthquake Probability Forecasting},
+  year = {2026},
+  url = {https://osf.io/pm3fq},
+  note = {OSF Preregistration}
+}
+```
 
 🔒 License
 
@@ -201,4 +278,9 @@ Seismo Framework is a research tool for scientific investigation of seismic prec
 ---
 
 Latest Release: v2.0.2 (2026-02-09)
-PyPI Package: https://pypi.org/project/seismo-framework/
+PyPI Package: https://pypi.org/project/seismo-framework/2.0.2/
+Zenodo DOI: 10.5281/zenodo.18563973
+OSF Registration: https://osf.io/pm3fq
+GitHub Mirror: https://github.com/gitdeeper3/seismo
+Bitbucket Mirror: https://bitbucket.org/gitdeeper3/seismo/
+Codeberg Mirror: https://codeberg.org/gitdeeper2/seismo/
