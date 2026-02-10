@@ -1,0 +1,66 @@
+cff-version: 1.2.0
+title: "An Eight-Parameter Assessment Framework for Tectonic Stress Evolution and Major Earthquake Probability Forecasting"
+message: "If you use this software or research, please cite it using these metadata."
+authors:
+  - family-names: "Baladi"
+    given-names: "Samir"
+    orcid: "https://orcid.org/0009-0003-8903-0029"
+    affiliation: "Ronin Institute"
+    email: "gitdeeper@gmail.com"
+
+identifiers:
+  - type: doi
+    value: "10.5281/zenodo.18563973"
+    description: "Zenodo archive of software and documentation"
+  - type: url
+    value: "https://zenodo.org/records/18563973"
+  - type: swh
+    value: "swh:1:dir:..."
+  - type: url
+    value: "https://osf.io/pm3fq"
+    description: "OSF Preregistration"
+  - type: url
+    value: "https://pypi.org/project/seismo-framework/2.0.2/"
+    description: "PyPI software package"
+
+repository-code: "https://gitlab.com/gitdeeper3/seismo"
+license: "MIT"
+version: "2.0.2"
+date-released: "2026-02-09"
+
+keywords:
+  - "Earthquake Forecasting"
+  - "Seismic Monitoring"
+  - "Multi-Parameter Integration"
+  - "Tectonic Stress Evolution"
+  - "Geophysics"
+  - "Bayesian Probability"
+  - "Early Warning Systems"
+  - "Open Science"
+  - "Preregistration"
+
+abstract: "Seismo Framework v2.0.2 is an innovative eight-parameter assessment framework for monitoring tectonic stress evolution and forecasting earthquake probability with 3-14 day lead times. The framework integrates seismic activity, crustal deformation, hydrogeological indicators, electrical/magnetic signals, instability indicators, tectonic stress state, rock properties, and gas geochemistry using Bayesian probability updating. Validation on 120 M ≥ 6.0 earthquakes (2000-2020) shows 84.2% accuracy, 78.5% sensitivity, 86.7% specificity, and 0.876 ROC AUC."
+
+preferred-citation:
+  authors:
+    - family-names: "Baladi"
+      given-names: "Samir"
+  title: "An Eight-Parameter Assessment Framework for Tectonic Stress Evolution and Major Earthquake Probability Forecasting"
+  type: "software"
+  version: "2.0.2"
+  year: "2026"
+  identifiers:
+    - type: doi
+      value: "10.5281/zenodo.18563973"
+    - type: url
+      value: "https://osf.io/pm3fq"
+
+registry:
+  - url: "https://osf.io/pm3fq"
+    type: "OSF Preregistration"
+    identifier: "pm3fq"
+    date: "2026-02-10"
+  - url: "https://doi.org/10.5281/zenodo.18563973"
+    type: "Zenodo"
+    identifier: "10.5281/zenodo.18563973"
+    date: "2026-02-09"
